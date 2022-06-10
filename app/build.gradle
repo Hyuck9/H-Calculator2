@@ -62,6 +62,9 @@ dependencies {
     implementation 'io.insert-koin:koin-android:3.1.2'
     implementation 'io.insert-koin:koin-android-ext:3.0.2'
 
+    // MxParser
+    implementation 'org.mariuszgromada.math:MathParser.org-mXparser:5.0.6'
+
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.0'
     implementation 'com.orhanobut:logger:2.2.0'
