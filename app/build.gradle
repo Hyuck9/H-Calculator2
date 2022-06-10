@@ -13,8 +13,6 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -27,6 +25,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -35,9 +37,11 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:1.4.2"
     implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
 
     // Room components
     def roomVersion = '2.4.2'
@@ -54,7 +58,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    /* Logging */
+    // Logging
     implementation 'com.jakewharton.timber:timber:5.0.0'
     implementation 'com.orhanobut:logger:2.2.0'
+
+    // Other libraries
+    implementation 'com.github.fornewid:neumorphism:0.2.0'
+    implementation 'com.github.jd-alexander:android-flat-button:v1.1'
 }

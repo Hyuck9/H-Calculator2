@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseButton" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="layout_constraintDimensionRatio">W,1:1</item>
+        <item name="fButtonColor">@color/md_grey_200</item>
+        <item name="shadowColor">@color/md_grey_400</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="shadowEnabled">true</item>
+        <item name="shadowHeight">4dp</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:textSize">@dimen/font_size</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+
+    <style name="DefaultButton" parent="BaseButton" />
+
+    <style name="MemoryClearButton" parent="DefaultButton">
+        <item name="iconTint">@color/md_orange</item>
+        <item name="android:textColor">@color/md_orange</item>
+    </style>
+
+    <style name="OperationButton" parent="DefaultButton">
+        <item name="iconTint">@color/md_green_500</item>
+        <item name="android:textColor">@color/md_green_500</item>
+    </style>
+
+    <style name="EqualButton" parent="DefaultButton">
+        <item name="fButtonColor">@color/md_green_500</item>
+        <item name="shadowColor">@color/md_green_800_dark</item>
+        <item name="android:textColor">@color/md_grey_white</item>
+    </style>
+
+    <style name="MemoryButton" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">@dimen/font_size</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="fButtonColor">@color/md_grey_600_dark</item>
+        <item name="shadowColor">@color/md_grey_700_dark</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="shadowEnabled">true</item>
+        <item name="shadowHeight">4dp</item>
+        <item name="android:layout_margin">4dp</item>
+    </style>
+</resources>
