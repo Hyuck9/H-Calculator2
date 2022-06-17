@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dark_grey"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:visibility="gone" />
+    <data>
 
-    <me.hyuck9.calculator.view.custom.CalculatorEditText
-        android:id="@+id/input"
+        <variable
+            name="viewModel"
+            type="me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel" />
+
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:autofillHints="none"
-        android:background="@null"
-        android:gravity="center_vertical|end"
-        android:inputType="text|textNoSuggestions"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:scrollHorizontally="true"
-        android:textSize="36sp"
-        app:maxTextSize="64sp"
-        app:minTextSize="36sp"
-        app:stepTextSize="8sp" />
+        android:background="@color/dark_grey"
+        android:orientation="vertical">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/output"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:ellipsize="end"
-        android:gravity="center_vertical|end"
-        android:maxLines="1"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:scrollHorizontally="true"
-        android:textSize="24sp" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <me.hyuck9.calculator.view.custom.CalculatorEditText
+            android:id="@+id/input"
+            style="@style/CustomEditText.Input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scrollHorizontally="true"
+            android:text="@{viewModel.inputLiveData}" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/output"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:gravity="center_vertical|end"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:scrollHorizontally="true"
+            android:text="@{viewModel.outputLiveData}"
+            android:textSize="24sp" />
+    </LinearLayout>
+</layout>

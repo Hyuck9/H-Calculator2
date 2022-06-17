@@ -45,4 +45,22 @@
         <item name="shadowHeight">4dp</item>
         <item name="android:layout_margin">4dp</item>
     </style>
+
+    <style name="CustomEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:gravity">center_vertical|end</item>
+    </style>
+
+    <style name="CustomEditText.Input">
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:paddingBottom">4dip</item>
+        <item name="android:paddingStart">16dip</item>
+        <item name="android:paddingEnd">16dip</item>
+        <item name="android:textColor">@color/md_grey_200</item>
+        <item name="minTextSize">36sp</item>
+        <item name="maxTextSize">64sp</item>
+        <item name="stepTextSize">8sp</item>
+    </style>
 </resources>
