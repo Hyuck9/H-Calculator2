@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -44,23 +45,20 @@ dependencies {
     implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
 
     // Room components
-    def roomVersion = '2.4.2'
     implementation "androidx.room:room-ktx:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // Lifecycle components
-    def lifecycleVersion = "2.4.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
 
     // Kotlin Coroutines
-    def coroutinesVersion = "1.6.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    // Koin
-    implementation 'io.insert-koin:koin-android:3.1.2'
-    implementation 'io.insert-koin:koin-android-ext:3.0.2'
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
     // MxParser
     implementation 'org.mariuszgromada.math:MathParser.org-mXparser:5.0.6'

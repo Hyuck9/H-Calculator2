@@ -18,7 +18,7 @@ import me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel
 
 class CalculatorFragment : BaseFragment() {
 
-	private val calcViewModel: CalculatorInputViewModel by viewModels()
+	private val calcViewModel by viewModels<CalculatorInputViewModel>()
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
