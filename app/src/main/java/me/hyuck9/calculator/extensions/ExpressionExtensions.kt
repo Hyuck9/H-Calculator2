@@ -5,6 +5,7 @@ import java.math.BigDecimal
 fun String.toExpression(): String {
 	return replace('×', '*')
 		.replace('÷', '/')
+		.replace('−', '-')
 		.replace("π", "pi")
 		.replace("sin⁻¹", "asin")
 		.replace("cos⁻¹", "acos")

@@ -11,7 +11,7 @@ import timber.log.Timber
 
 class CalculatorInputViewModel : ViewModel() {
 
-	private val operators = listOf('^', '÷', '×', '+', '-')
+	private val operators = listOf('^', '÷', '×', '+', '−')
 	private val numRegex = "-?[0-9]+\\.?[0-9]*".toRegex()
 	private var isDecimal = false
 
@@ -74,7 +74,7 @@ class CalculatorInputViewModel : ViewModel() {
 			} else if (operators.contains(input[0])) {
 				if (operators.contains(lastChar)) {
 					if (expression.length > 2) {
-						if (operators.contains(expression[expression.length - 2]) && lastChar == '-') {
+						if (operators.contains(expression[expression.length - 2]) && lastChar == '−') {
 							if ("÷×+".contains(input[0])) {
 								replaceTwoChar(input)
 							} else {
@@ -82,7 +82,7 @@ class CalculatorInputViewModel : ViewModel() {
 							}
 						}
 					}
-					if (input == "-" && "×÷".contains(lastChar)) {
+					if (input == "−" && "×÷".contains(lastChar)) {
 						add(input)
 					} else {
 						replace(input)

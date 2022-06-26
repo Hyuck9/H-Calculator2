@@ -8,14 +8,14 @@ import me.hyuck9.calculator.view.base.BaseActivity
 
 class MainActivity : BaseActivity() {
 
-	private lateinit var binding: ActivityMainBinding
+	private val binding: ActivityMainBinding by binding(R.layout.activity_main)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		binding = ActivityMainBinding.inflate(layoutInflater)
-		setContentView(binding.root)
-		setUpViews()
+		binding.apply {
+			setUpViews()
+		}
 	}
 
 	private fun setUpViews() {
