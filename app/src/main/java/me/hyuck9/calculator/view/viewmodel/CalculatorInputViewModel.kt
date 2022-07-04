@@ -23,12 +23,22 @@ class CalculatorInputViewModel : ViewModel() {
 
 
 	fun numberClicked(num: String) {
-		Timber.d("num : $num")
 		insert(num)
 	}
 
 	fun operatorClicked(oper: String) {
 		insert(oper)
+	}
+
+	fun decimalClicked() {
+		val expression = inputLiveData.value ?: ""
+		val lastIndexOfDecimalPoint = expression.lastIndexOf('.')
+		expression.substring(lastIndexOfDecimalPoint + 1, )
+
+
+		if (expression.isEmpty()) {    // input이 비어있는 경우 (첫번째 입력)
+
+		}
 	}
 
 	fun clearAll(): Boolean {
