@@ -6,8 +6,9 @@ import java.text.DecimalFormat
 
 val operators = listOf('^', '÷', '×', '+', '−', '(', ')')
 
-fun String.toViewExpression(): String {
-	return replace('*', '×')
+fun CharSequence.toViewExpression(): String {
+	return toString()
+		.replace('*', '×')
 		.replace('/', '÷')
 		.replace('-', '−')
 		.replace("pi", "π")
@@ -17,8 +18,9 @@ fun String.toViewExpression(): String {
 		.replace("log10", "log")
 }
 
-fun String.toExpression(): String {
-	return replace('×', '*')
+fun CharSequence.toExpression(): String {
+	return toString()
+		.replace('×', '*')
 		.replace('÷', '/')
 		.replace('−', '-')
 		.replace("π", "pi")
@@ -29,7 +31,6 @@ fun String.toExpression(): String {
 		.removeComma()
 		.maybeAppendClosedBrackets()
 }
-fun CharSequence.toExpression(): String = this.toString().toExpression()
 
 
 
