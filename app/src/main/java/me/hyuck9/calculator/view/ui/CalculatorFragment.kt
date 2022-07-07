@@ -3,14 +3,17 @@ package me.hyuck9.calculator.view.ui
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator.ofFloat
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import me.hyuck9.calculator.R
 import me.hyuck9.calculator.databinding.FragmentCalculatorBinding
+import me.hyuck9.calculator.evaluation.ExpressionBuilder
 import me.hyuck9.calculator.extensions.observeLiveData
 import me.hyuck9.calculator.view.base.BaseFragment
 import me.hyuck9.calculator.view.custom.CalculatorEditText
@@ -38,7 +41,16 @@ class CalculatorFragment : BaseFragment() {
 	}
 
 	private fun FragmentCalculatorBinding.bindViews() {
-		inputField.input.setOnTextSizeChangeListener(formulaOnTextSizeChangeListener)
+		with(inputField.input) {
+			setOnTextSizeChangeListener(formulaOnTextSizeChangeListener)
+			setEditableFactory(object : Editable.Factory() {
+				override fun newEditable(source: CharSequence): Editable {
+					return ExpressionBuilder(source, calcViewModel.isEdited())
+				}
+			})
+			doAfterTextChanged {  }
+		}
+
 	}
 
 	private fun addObservers() {

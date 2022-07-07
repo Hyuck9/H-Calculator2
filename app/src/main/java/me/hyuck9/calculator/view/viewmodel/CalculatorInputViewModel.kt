@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import me.hyuck9.calculator.extensions.toExpression
 import me.hyuck9.calculator.extensions.toSimpleString
+import me.hyuck9.calculator.model.CalculateState
 import org.mariuszgromada.math.mxparser.Expression
 import timber.log.Timber
 
@@ -14,6 +15,7 @@ class CalculatorInputViewModel : ViewModel() {
 	private val operators = listOf('^', '÷', '×', '+', '−')
 	private val numRegex = "-?[0-9]+\\.?[0-9]*".toRegex()
 	private var isDecimal = false
+	private var currentState = CalculateState.INPUT
 
 	private val inputMutableLiveData = MutableLiveData("")
 	val inputLiveData: LiveData<String> = inputMutableLiveData
@@ -121,5 +123,9 @@ class CalculatorInputViewModel : ViewModel() {
 		val expression = inputLiveData.value ?: ""
 		inputMutableLiveData.value = expression.substring(0, expression.length - 2) + input
 	}
+
+
+
+	fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
 
 }
