@@ -29,7 +29,6 @@ fun CharSequence.toExpression(): String {
 		.replace("tan⁻¹", "atan")
 		.replace("log", "log10")
 		.removeComma()
-		.maybeAppendClosedBrackets()
 }
 
 
@@ -49,7 +48,7 @@ fun String.addComma(): String {
 fun String.removeComma() = this.replace(",", "")
 fun String.removeCommaToBigInteger() = this.removeComma().toBigInteger()
 fun String.removeCommaToDouble() = this.removeComma().toDouble()
-fun String.makeCommaExpr(): String {
+fun CharSequence.makeCommaExpr(): String {
 	var exprString = ""
 	val array = separateOperator()
 
@@ -63,7 +62,7 @@ fun String.makeCommaExpr(): String {
 
 
 
-fun String.separateOperator(): ArrayList<String> {
+fun CharSequence.separateOperator(): ArrayList<String> {
 	val array = arrayListOf<String>()
 	var offset = 0
 
@@ -75,7 +74,7 @@ fun String.separateOperator(): ArrayList<String> {
 			if ("()".contains(char)) {
 				array.add(char.toString())							// 괄호 저장
 			} else {
-				array.add("<font color='#1b80ef'> $char </font>")	// operator 저장
+				array.add("<font color='#4CAF50'>$char</font>")	// operator 저장
 			}
 			offset = index + 1	// 다음 operator까지 자를 시작 지점 저장
 		}
@@ -99,10 +98,10 @@ fun String.isNumeric(): Boolean {
 	return true
 }
 
-fun String.maybeAppendClosedBrackets(): String {
-	var expression = this
-	val open = getLeftParentCount()
-	val close = getRightParentCount()
+fun CharSequence.maybeAppendClosedBrackets(): String {
+	var expression = this.toString()
+	val open = getLeftParenCount()
+	val close = getRightParenCount()
 
 	if (open - close > 0) {
 		for (i in 0 until open - close) expression += ")"
@@ -113,11 +112,11 @@ fun String.maybeAppendClosedBrackets(): String {
 	return expression
 }
 
-fun String.getLeftParentCount() = getCharCountOfString('(')
+fun CharSequence.getLeftParenCount() = getCharCountOfString('(')
 
-fun String.getRightParentCount() = getCharCountOfString(')')
+fun CharSequence.getRightParenCount() = getCharCountOfString(')')
 
-fun String.getCharCountOfString(find: Char): Int {
+fun CharSequence.getCharCountOfString(find: Char): Int {
 	var count = 0
 	for (element in this) {
 		if (element == find) {

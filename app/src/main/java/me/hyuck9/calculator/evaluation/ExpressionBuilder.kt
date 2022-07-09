@@ -4,8 +4,9 @@ import android.text.SpannableStringBuilder
 import androidx.core.text.isDigitsOnly
 import me.hyuck9.calculator.extensions.toExpression
 import me.hyuck9.calculator.extensions.toViewExpression
+import timber.log.Timber
 
-class ExpressionBuilder(text: CharSequence, var isEdited: Boolean = false) : SpannableStringBuilder(text) {
+class ExpressionBuilder(text: CharSequence = "", var isEdited: Boolean = false) : SpannableStringBuilder(text) {
 
 	var isError = false
 
@@ -16,6 +17,7 @@ class ExpressionBuilder(text: CharSequence, var isEdited: Boolean = false) : Spa
 		tbstart: Int,
 		tbend: Int
 	): SpannableStringBuilder {
+		Timber.i("ExpressionBuilder - start : $start, end : $end, tb : $tb, tbstart : $tbstart, tbend : $tbend")
 		if (start != length || end != length) {
 			isEdited = true
 			return super.replace(start, end, tb, tbstart, tbend)

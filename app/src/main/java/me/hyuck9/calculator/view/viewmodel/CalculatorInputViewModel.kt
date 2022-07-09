@@ -1,21 +1,23 @@
 package me.hyuck9.calculator.view.viewmodel
 
-import androidx.core.text.isDigitsOnly
+import android.text.SpannableStringBuilder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import me.hyuck9.calculator.extensions.toExpression
-import me.hyuck9.calculator.extensions.toSimpleString
+import me.hyuck9.calculator.common.Constants.CHAR_OF_EMPTY_EXPRESSION
+import me.hyuck9.calculator.evaluation.ExpressionBuilder
+import me.hyuck9.calculator.extensions.*
 import me.hyuck9.calculator.model.CalculateState
 import org.mariuszgromada.math.mxparser.Expression
 import timber.log.Timber
 
 class CalculatorInputViewModel : ViewModel() {
 
-	private val operators = listOf('^', '÷', '×', '+', '−')
 	private val numRegex = "-?[0-9]+\\.?[0-9]*".toRegex()
-	private var isDecimal = false
 	private var currentState = CalculateState.INPUT
+
+	private val expressionBuilder = MutableLiveData(ExpressionBuilder())
+	val expressionLiveData: LiveData<ExpressionBuilder> = expressionBuilder
 
 	private val inputMutableLiveData = MutableLiveData("")
 	val inputLiveData: LiveData<String> = inputMutableLiveData
@@ -24,45 +26,67 @@ class CalculatorInputViewModel : ViewModel() {
 	val outputLiveData: LiveData<String> = outputMutableLiveData
 
 
+
+	fun setViewExpression() {
+		inputMutableLiveData.value = expressionBuilder.value!!.makeCommaExpr()
+	}
+
+
+
+
+
 	fun numberClicked(num: String) {
-		insert(num)
-	}
+		// TODO: 글자수 제한 체크
+		if (isLastInputRightParen() && isStateNotResult()) {
+			appendExpression("×")
+		}
 
-	fun operatorClicked(oper: String) {
-		insert(oper)
-	}
-
-	fun decimalClicked() {
-		val expression = inputLiveData.value ?: ""
-		val lastIndexOfDecimalPoint = expression.lastIndexOf('.')
-		expression.substring(lastIndexOfDecimalPoint + 1, )
-
-
-		if (expression.isEmpty()) {    // input이 비어있는 경우 (첫번째 입력)
-
+		if (num == "00") {
+			appendDoubleO()
+		} else {
+			appendExpression(num)
 		}
 	}
 
+	fun operatorClicked(oper: String) {
+		// TODO: 에러 체크
+		// TODO: 글자수 제한 체크
+		appendExpression(oper)
+	}
+
+	fun parensClicked() {
+		// TODO: 글자수 제한 체크
+		appendParens()
+	}
+
 	fun clearAll(): Boolean {
-		inputMutableLiveData.value = ""
+		if (expressionBuilder.value.isNullOrBlank()) return false
+
+		expressionBuilder.value = ExpressionBuilder()
 		outputMutableLiveData.value = ""
 		return true
 	}
 
 	fun backspaceClicked() {
-		val expression = inputLiveData.value ?: ""
-		inputMutableLiveData.value = if (expression.isEmpty()) "" else expression.substring(0, expression.length - 1)
+		with(expressionBuilder.value!!) {
+			isError = false
+			// TODO: isError .....
+			// TODO: isEqual .....
+			// TODO: memory .....
+			if (isNotEmpty()) {
+				delete(length - 1, length).setExpressionBuilder()
+			}
+		}
 	}
 
 
 
 	fun calculateOutput() {
-		val currentInput = inputLiveData.value!!
-		val result: Double
+		val currentInput = expressionBuilder.value!!
 		if (currentInput.matches(numRegex)) {
 			outputMutableLiveData.value = ""
 		} else if (currentInput.isNotEmpty()) {
-			result = Expression(inputLiveData.value!!.toExpression()).calculate()
+			val result = Expression(expressionBuilder.value!!.toExpression()).calculate()
 			if (result.toString() != "NaN") {
 				outputMutableLiveData.value = result.toSimpleString()
 			}
@@ -72,60 +96,69 @@ class CalculatorInputViewModel : ViewModel() {
 	}
 
 
-	private fun insert(input: String) {
-		val expression = inputLiveData.value ?: ""
-		if (input.isDigitsOnly().not() && input != ".") {
-			isDecimal = false
-		}
-		if (expression.isEmpty()) {	// input이 비어있는 경우 (첫번째 입력)
-			add(input)
+
+
+
+	private fun appendParens() {
+		if (isMoreThanLeftParen() && checkLastOperatorAndLeftParen().not()) {
+			appendExpression(")")
+		} else if (expressionBuilder.value!!.isEdited && checkLastOperatorAndLeftParen().not()) {
+			appendExpression("×(")
 		} else {
-			val lastChar = expression.last()
-			if (input.isDigitsOnly()) {
-				add(input)
-			} else if (operators.contains(input[0])) {
-				if (operators.contains(lastChar)) {
-					if (expression.length > 2) {
-						if (operators.contains(expression[expression.length - 2]) && lastChar == '−') {
-							if ("÷×+".contains(input[0])) {
-								replaceTwoChar(input)
-							} else {
-								return
-							}
-						}
-					}
-					if (input == "−" && "×÷".contains(lastChar)) {
-						add(input)
-					} else {
-						replace(input)
-					}
-				} else {
-					add(input)
-				}
-			} else {
-				add(input)
-			}
+			appendExpression("(")
 		}
 	}
-
-	private fun add(input: String) {
-		val expression = inputLiveData.value ?: ""
-		inputMutableLiveData.value = expression + input
-		Timber.i("inputLiveData : ${inputMutableLiveData.value}")
+	private fun isMoreThanLeftParen() = expressionBuilder.value!!.run {
+		return@run getLeftParenCount() - getRightParenCount() > 0
 	}
+	private fun getLastInput() = expressionBuilder.value!!.lastOrNull() ?: CHAR_OF_EMPTY_EXPRESSION
+	private fun checkLastOperatorAndLeftParen() = "s(×÷−+".contains(getLastInput())
+	private fun isLastInputRightParen() = ")".contains(getLastInput())
 
-	private fun replace(input: String) {
-		val expression = inputLiveData.value ?: ""
-		inputMutableLiveData.value = expression.substring(0, expression.length - 1) + input
-	}
 
-	private fun replaceTwoChar(input: String) {
-		val expression = inputLiveData.value ?: ""
-		inputMutableLiveData.value = expression.substring(0, expression.length - 2) + input
+
+
+	private fun appendDoubleO() {
+		if (isFirstCharAtOperandZero()) {
+			Timber.i("First char at operand is Zero")
+		} else if (isFirstOperandOrEmpty()) {
+			appendExpression("0")
+		} else {
+			appendExpression("00")
+		}
 	}
+	private fun isFirstCharAtOperandZero() = if (expressionBuilder.value!!.length >= 2) {
+		"×÷−+".contains(expressionBuilder.value!!.run{this[length - 2]}) && getLastInput() == '0'
+	} else {
+		expressionBuilder.value!!.singleOrNull() == '0'
+	}
+	private fun isFirstOperandOrEmpty() = "s×÷−+".contains(getLastInput())
+
+
+
+	private fun isStateResult() = currentState == CalculateState.RESULT
+	private fun isStateNotResult() = isStateResult().not()
+
 
 
 
 	fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
+	fun setInputState() {
+		currentState = CalculateState.INPUT
+	}
+
+
+
+
+	private fun appendExpression(input: String) {
+		expressionBuilder.value!!.append(input).setExpressionBuilder()
+	}
+
+
+
+
+	private fun SpannableStringBuilder.setExpressionBuilder() {
+		expressionBuilder.value = this as ExpressionBuilder
+	}
 
 }

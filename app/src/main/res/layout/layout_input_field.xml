@@ -8,6 +8,8 @@
             name="viewModel"
             type="me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel" />
 
+        <import type="me.hyuck9.calculator.extensions.StringExtensionsKt" />
+
     </data>
 
     <LinearLayout
@@ -30,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scrollHorizontally="true"
-            android:text="@{viewModel.inputLiveData}" />
+            android:text="@{StringExtensionsKt.fromHtml(viewModel.inputLiveData)}" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/output"
