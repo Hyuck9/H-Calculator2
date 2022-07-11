@@ -101,9 +101,9 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnOperatorMultiply"
             style="@style/OperationButton"
+            android:onClick="@{() -> viewModel.operatorClicked(@string/op_mul)}"
             android:text="@string/op_mul"
             android:textStyle="bold"
-            android:onClick="@{() -> viewModel.operatorClicked(@string/op_mul)}"
             app:layout_constraintBottom_toTopOf="@+id/btnOperatorPlus"
             app:layout_constraintEnd_toStartOf="@+id/btnOperatorDivision"
             app:layout_constraintStart_toEndOf="@+id/btnDigit6"
@@ -112,8 +112,8 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnOperatorDivision"
             style="@style/OperationButton"
-            android:text="@string/op_div"
             android:onClick="@{() -> viewModel.operatorClicked(@string/op_div)}"
+            android:text="@string/op_div"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btnOperatorMinus"
             app:layout_constraintEnd_toEndOf="parent"
@@ -154,9 +154,9 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnOperatorPlus"
             style="@style/OperationButton"
+            android:onClick="@{() -> viewModel.operatorClicked(@string/op_add)}"
             android:text="@string/op_add"
             android:textStyle="bold"
-            android:onClick="@{() -> viewModel.operatorClicked(@string/op_add)}"
             app:layout_constraintBottom_toTopOf="@+id/btnParens"
             app:layout_constraintEnd_toStartOf="@+id/btnOperatorMinus"
             app:layout_constraintStart_toEndOf="@+id/btnDigit3"
@@ -165,8 +165,8 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnOperatorMinus"
             style="@style/OperationButton"
-            android:text="@string/op_sub"
             android:onClick="@{() -> viewModel.operatorClicked(@string/op_sub)}"
+            android:text="@string/op_sub"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btnEqual"
             app:layout_constraintEnd_toEndOf="parent"
@@ -177,8 +177,8 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnDigit0"
             style="@style/DefaultButton"
-            android:text="@string/digit_0"
             android:onClick="@{() -> viewModel.numberClicked(@string/digit_0)}"
+            android:text="@string/digit_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnDigit00"
             app:layout_constraintStart_toStartOf="parent"
@@ -187,8 +187,8 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnDigit00"
             style="@style/DefaultButton"
-            android:text="@string/digit_00"
             android:onClick="@{() -> viewModel.numberClicked(@string/digit_00)}"
+            android:text="@string/digit_00"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnDecimalPoint"
             app:layout_constraintStart_toEndOf="@+id/btnDigit0"
@@ -197,8 +197,8 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnDecimalPoint"
             style="@style/DefaultButton"
-            android:text="@string/decimal_point"
             android:onClick="@{() -> viewModel.numberClicked(@string/decimal_point)}"
+            android:text="@string/decimal_point"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnParens"
             app:layout_constraintStart_toEndOf="@+id/btnDigit00"
@@ -207,9 +207,9 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnParens"
             style="@style/OperationButton"
+            android:onClick="@{() -> viewModel.parensClicked()}"
             android:text="@string/parens"
             android:textStyle="bold"
-            android:onClick="@{() -> viewModel.parensClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnEqual"
             app:layout_constraintStart_toEndOf="@+id/btnDecimalPoint"
@@ -218,6 +218,7 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnEqual"
             style="@style/EqualButton"
+            android:onClick="@{() -> viewModel.equalClicked()}"
             android:text="@string/equal"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

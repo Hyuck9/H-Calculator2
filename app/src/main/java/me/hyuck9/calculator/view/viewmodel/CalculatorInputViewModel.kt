@@ -79,6 +79,36 @@ class CalculatorInputViewModel : ViewModel() {
 		}
 	}
 
+	fun equalClicked() {
+		if (outputMutableLiveData.value.isNullOrEmpty()) {
+			// TODO: Toast Message - 수식이 잘못되었습니다.
+			return
+		}
+
+//		inputMutableLiveData.value = inputMutableLiveData.value!!.maybeAppendClosedBrackets()
+
+		if (currentState == CalculateState.INPUT) {
+			// TODO: setDisplayState(CalculatorState.EVALUATE) -> Display 상태별 글자 색 변경
+			// TODO: output -> input
+
+		}
+
+		// TODO: 히스토리 저장
+	}
+
+	fun test() {
+		val currentInput = expressionBuilder.value!!
+		if (currentInput.isNotEmpty()) {
+			if ("+-/*".contains(currentInput.last())) {
+				// TODO: Toast Message - 완성되지 않은 수식입니다.
+				return
+			}
+			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
+			inputMutableLiveData.value = result.toSimpleString()
+			outputMutableLiveData.value = ""
+		}
+	}
+
 
 
 	fun calculateOutput() {
@@ -86,8 +116,10 @@ class CalculatorInputViewModel : ViewModel() {
 		if (currentInput.matches(numRegex)) {
 			outputMutableLiveData.value = ""
 		} else if (currentInput.isNotEmpty()) {
-			val result = Expression(expressionBuilder.value!!.toExpression()).calculate()
-			if (result.toString() != "NaN") {
+			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
+			if (result.isNaN() || result.isInfinite()) {
+				// TODO: 오류 표시
+			} else {
 				outputMutableLiveData.value = result.toSimpleString()
 			}
 		} else {
