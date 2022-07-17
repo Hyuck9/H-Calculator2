@@ -90,22 +90,23 @@ class CalculatorInputViewModel : ViewModel() {
 		if (currentState == CalculateState.INPUT) {
 			// TODO: setDisplayState(CalculatorState.EVALUATE) -> Display 상태별 글자 색 변경
 			// TODO: output -> input
-
+			onEvaluate()
 		}
 
 		// TODO: 히스토리 저장
 	}
 
-	fun test() {
+	private fun onEvaluate() {
 		val currentInput = expressionBuilder.value!!
 		if (currentInput.isNotEmpty()) {
-			if ("+-/*".contains(currentInput.last())) {
+			Timber.i("currentInput : $currentInput")
+			if ("×÷−+".contains(currentInput.last())) {
+				Timber.i("last : ${currentInput.last()}")
 				// TODO: Toast Message - 완성되지 않은 수식입니다.
 				return
 			}
 			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
-			inputMutableLiveData.value = result.toSimpleString()
-			outputMutableLiveData.value = ""
+			expressionBuilder.value = ExpressionBuilder(result.toSimpleString())
 		}
 	}
 
@@ -120,7 +121,7 @@ class CalculatorInputViewModel : ViewModel() {
 			if (result.isNaN() || result.isInfinite()) {
 				// TODO: 오류 표시
 			} else {
-				outputMutableLiveData.value = result.toSimpleString()
+				outputMutableLiveData.value = result.toSimpleString().makeCommaExpr()
 			}
 		} else {
 			outputMutableLiveData.value = ""
