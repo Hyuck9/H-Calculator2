@@ -1,6 +1,7 @@
 package me.hyuck9.calculator
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.HiltAndroidApp
@@ -11,6 +12,8 @@ class App : Application() {
 
 	override fun onCreate() {
 		super.onCreate()
+
+		AndroidThreeTen.init(this)
 
 		if (BuildConfig.DEBUG) {
 			Logger.addLogAdapter(AndroidLogAdapter())

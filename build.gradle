@@ -11,6 +11,7 @@ ext {
     lifecycleVersion = "2.5.0"
     coroutinesVersion = "1.6.2"
     hiltVersion = "2.40.1"
+    splittiesVersion = "3.0.0-rc03"
 }
 
 task clean(type: Delete) {

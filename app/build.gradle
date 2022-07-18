@@ -61,6 +61,12 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
+    // Splitties
+    implementation "com.louiscad.splitties:splitties-resources:$splittiesVersion"
+
+    // LocalDateTime
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
+
     // MxParser
     implementation 'org.mariuszgromada.math:MathParser.org-mXparser:5.0.6'
 

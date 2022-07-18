@@ -218,7 +218,6 @@
         <info.hoang8f.widget.FButton
             android:id="@+id/btnEqual"
             style="@style/EqualButton"
-            android:onClick="@{() -> viewModel.equalClicked()}"
             android:text="@string/equal"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

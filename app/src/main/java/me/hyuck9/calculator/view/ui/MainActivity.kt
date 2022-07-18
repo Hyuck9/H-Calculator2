@@ -2,10 +2,12 @@ package me.hyuck9.calculator.view.ui
 
 import android.os.Bundle
 import androidx.fragment.app.commit
+import dagger.hilt.android.AndroidEntryPoint
 import me.hyuck9.calculator.R
 import me.hyuck9.calculator.databinding.ActivityMainBinding
 import me.hyuck9.calculator.view.base.BaseActivity
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
 	private val binding: ActivityMainBinding by binding(R.layout.activity_main)

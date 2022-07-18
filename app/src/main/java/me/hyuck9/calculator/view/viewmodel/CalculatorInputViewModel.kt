@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import me.hyuck9.calculator.common.Constants.CHAR_OF_EMPTY_EXPRESSION
+import me.hyuck9.calculator.data.db.entity.History
 import me.hyuck9.calculator.evaluation.ExpressionBuilder
 import me.hyuck9.calculator.extensions.*
 import me.hyuck9.calculator.model.CalculateState
@@ -79,7 +80,7 @@ class CalculatorInputViewModel : ViewModel() {
 		}
 	}
 
-	fun equalClicked() {
+	fun equalClicked(saveHistory: (history: History)-> Unit) {
 		if (outputMutableLiveData.value.isNullOrEmpty()) {
 			// TODO: Toast Message - 수식이 잘못되었습니다.
 			return
@@ -89,14 +90,12 @@ class CalculatorInputViewModel : ViewModel() {
 
 		if (currentState == CalculateState.INPUT) {
 			// TODO: setDisplayState(CalculatorState.EVALUATE) -> Display 상태별 글자 색 변경
-			// TODO: output -> input
-			onEvaluate()
+			onEvaluate(saveHistory)
 		}
 
-		// TODO: 히스토리 저장
 	}
 
-	private fun onEvaluate() {
+	private fun onEvaluate(saveHistory: (history: History)-> Unit) {
 		val currentInput = expressionBuilder.value!!
 		if (currentInput.isNotEmpty()) {
 			Timber.i("currentInput : $currentInput")
@@ -106,9 +105,12 @@ class CalculatorInputViewModel : ViewModel() {
 				return
 			}
 			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
+			val history = History(inputMutableLiveData.value!!, result.toSimpleString())
+			saveHistory.invoke(history)
 			expressionBuilder.value = ExpressionBuilder(result.toSimpleString())
 		}
 	}
+
 
 
 
