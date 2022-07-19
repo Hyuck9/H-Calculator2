@@ -25,14 +25,14 @@ data class History(
 	var id: Long = 0
 
 	val formula: Spanned
-		get() = expr.fromHtml()
+		get() = expr.makeCommaExpr().fromHtml()
 
-	val result: String
-		get() = "=${answer.makeCommaExpr()}"
+	val result: Spanned
+		get() = "=${answer.makeCommaExpr()}".fromHtml()
 
 	val createdTimeText: String
 		get() = date.toTimeString()
 
-	val createdDateText: String
-		get() = date.toDateString()
+	/*val createdDateText: String
+		get() = date.toDateString()*/
 }

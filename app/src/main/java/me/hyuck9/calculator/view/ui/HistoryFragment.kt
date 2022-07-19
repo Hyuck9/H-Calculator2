@@ -1,19 +1,20 @@
 package me.hyuck9.calculator.view.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import me.hyuck9.calculator.R
 import me.hyuck9.calculator.databinding.FragmentHistoryBinding
 import me.hyuck9.calculator.extensions.observeLiveData
 import me.hyuck9.calculator.view.adapter.HistoryAdapter
 import me.hyuck9.calculator.view.base.BaseFragment
 import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
+import timber.log.Timber
 
 class HistoryFragment : BaseFragment() {
 
@@ -32,18 +33,46 @@ class HistoryFragment : BaseFragment() {
 			container
 		).apply {
 			bindViews()
+			bindListeners()
 			addObservers()
 		}.root
 	}
 
 	private fun FragmentHistoryBinding.bindViews() {
-		historyRecyclerView.apply {
+		rvHistory.apply {
 			setHasFixedSize(false)
 			layoutManager = LinearLayoutManager(context).apply {
 				reverseLayout = false
 				stackFromEnd = true
 			}
 			adapter = historyAdapter
+		}
+	}
+
+	private fun FragmentHistoryBinding.bindListeners() {
+		ItemTouchHelper(object :
+			ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+			override fun onMove(
+				recyclerView: RecyclerView,
+				viewHolder: RecyclerView.ViewHolder,
+				target: RecyclerView.ViewHolder
+			): Boolean {
+				return false
+			}
+
+			override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+				val position = viewHolder.adapterPosition
+				historyViewModel.deleteHistory(historyAdapter.data[position])
+			}
+		}).attachToRecyclerView(rvHistory)
+
+		historyAdapter.onExpressionClick = { history ->
+			Timber.i("history : $history")
+			historyViewModel.selectHistory(history.expr)
+		}
+		historyAdapter.onAnswerClick = { history ->
+			Timber.i("history : $history")
+			historyViewModel.selectHistory(history.answer)
 		}
 
 	}

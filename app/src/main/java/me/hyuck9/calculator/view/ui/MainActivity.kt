@@ -11,6 +11,7 @@ import me.hyuck9.calculator.view.base.BaseActivity
 class MainActivity : BaseActivity() {
 
 	private val binding: ActivityMainBinding by binding(R.layout.activity_main)
+	private val calculatorFragment = CalculatorFragment()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -22,8 +23,17 @@ class MainActivity : BaseActivity() {
 
 	private fun setUpViews() {
 		supportFragmentManager.commit {
-			val fragment = CalculatorFragment()
-			add(R.id.fcv_container, fragment, fragment.javaClass.name)
+			add(R.id.fcv_container, calculatorFragment, calculatorFragment.javaClass.name)
 		}
+	}
+
+	override fun onBackPressed() {
+
+		if (calculatorFragment.isHistoryPanelOpened()) {
+			calculatorFragment.closeHistoryPanel()
+			return
+		}
+
+		super.onBackPressed()
 	}
 }

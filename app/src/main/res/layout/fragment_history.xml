@@ -9,7 +9,7 @@
         tools:context=".view.ui.HistoryFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/historyRecyclerView"
+            android:id="@+id/rvHistory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_history" />

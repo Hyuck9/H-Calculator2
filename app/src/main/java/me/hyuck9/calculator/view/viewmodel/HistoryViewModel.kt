@@ -1,8 +1,6 @@
 package me.hyuck9.calculator.view.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import me.hyuck9.calculator.data.db.entity.History
@@ -17,7 +15,20 @@ class HistoryViewModel @Inject constructor(
 
 	val histories = historyRepository.allHistories
 
+	private val selectedHistoryMutableLiveData: MutableLiveData<String> = MutableLiveData()
+	val selectedHistory: LiveData<String> = selectedHistoryMutableLiveData
+
+	fun selectHistory(expr: String) {
+		selectedHistoryMutableLiveData.value = expr
+	}
+
 	fun insertHistory(history: History) = viewModelScope.launch {
 		historyRepository.insert(history)
 	}
+
+	fun deleteHistory(history: History) =
+		viewModelScope.launch {
+			historyRepository.delete(history)
+		}
+
 }

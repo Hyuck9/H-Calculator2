@@ -1,10 +1,8 @@
 package me.hyuck9.calculator.data.db.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import io.reactivex.rxjava3.core.Completable
 import me.hyuck9.calculator.data.db.entity.History
 
 @Dao
@@ -16,9 +14,11 @@ interface HistoryDao {
 	@Insert
 	suspend fun insert(history: History)
 
+	@Transaction
 	@Delete
 	suspend fun delete(history: History)
 
+	@Transaction
 	@Query("DELETE FROM History")
 	suspend fun deleteAll()
 }

@@ -11,6 +11,9 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 	var data: MutableList<History> = mutableListOf()
 
+	var onExpressionClick: ((History) -> Unit)? = null
+	var onAnswerClick: ((History) -> Unit)? = null
+
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
 		ViewHolder(
 			ItemHistoryBinding.inflate(
@@ -32,6 +35,9 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 		notifyDataSetChanged()
 	}
 
+	fun remove(position: Int) {
+		data.removeAt(position)
+	}
 	fun remove(item: History) {
 		data.remove(item)
 	}
@@ -42,10 +48,12 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 			binding.apply {
 				history = item
 				tvDate.isVisible = isVisibleHeader(layoutPosition)
+				tvExpression.setOnClickListener { onExpressionClick?.invoke(item) }
+				tvAnswer.setOnClickListener { onAnswerClick?.invoke(item) }
 			}
 		}
 	}
 
 	/** 첫번째 아이템이거나 이전 아이템과 날짜가 다른 경우 TRUE 그 외 FALSE */
-	fun isVisibleHeader(position: Int) = position == 0 || data[position].createdDateText != data[position-1].createdDateText
+	fun isVisibleHeader(position: Int) = position == 0 || data[position].createdTimeText != data[position-1].createdTimeText
 }

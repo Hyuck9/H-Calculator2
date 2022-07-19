@@ -63,7 +63,7 @@ class CalculatorInputViewModel : ViewModel() {
 	fun clearAll(): Boolean {
 		if (expressionBuilder.value.isNullOrBlank()) return false
 
-		expressionBuilder.value = ExpressionBuilder()
+		setExpression()
 		outputMutableLiveData.value = ""
 		return true
 	}
@@ -105,9 +105,9 @@ class CalculatorInputViewModel : ViewModel() {
 				return
 			}
 			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
-			val history = History(inputMutableLiveData.value!!, result.toSimpleString())
+			val history = History(expressionBuilder.value!!.maybeAppendClosedBrackets(), result.toSimpleString())
 			saveHistory.invoke(history)
-			expressionBuilder.value = ExpressionBuilder(result.toSimpleString())
+			setExpression(result.toSimpleString())
 		}
 	}
 
@@ -182,6 +182,10 @@ class CalculatorInputViewModel : ViewModel() {
 		currentState = CalculateState.INPUT
 	}
 
+
+	fun setExpression(expr: String = "") {
+		expressionBuilder.value = ExpressionBuilder(expr)
+	}
 
 
 

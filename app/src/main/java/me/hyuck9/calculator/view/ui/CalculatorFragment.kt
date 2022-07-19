@@ -34,13 +34,15 @@ class CalculatorFragment : BaseFragment() {
 
 	private val historyFragment = HistoryFragment()
 
+	private lateinit var binding: FragmentCalculatorBinding
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
 
-		return binding<FragmentCalculatorBinding>(
+		binding = binding<FragmentCalculatorBinding>(
 			inflater,
 			R.layout.fragment_calculator,
 			container
@@ -50,7 +52,9 @@ class CalculatorFragment : BaseFragment() {
 			bindListeners()
 			addObservers()
 			setupHistoryPanel()
-		}.root
+		}
+
+		return binding.root
 	}
 
 	private fun FragmentCalculatorBinding.bindViews() {
@@ -68,12 +72,18 @@ class CalculatorFragment : BaseFragment() {
 		}
 	}
 
-	private fun addObservers() {
+	private fun FragmentCalculatorBinding.addObservers() {
 		observeLiveData(calcViewModel.inputLiveData) {
 			calcViewModel.calculateOutput()
 		}
 		observeLiveData(calcViewModel.expressionLiveData) {
 			calcViewModel.setViewExpression()
+		}
+		observeLiveData(historyViewModel.selectedHistory) {
+			calcViewModel.setExpression(it)
+			if (draggablePanel.isOpen()) {
+				draggablePanel.smoothPanelClose(300)
+			}
 		}
 	}
 
@@ -141,5 +151,10 @@ class CalculatorFragment : BaseFragment() {
 		duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
 		interpolator = AccelerateDecelerateInterpolator()
 	}.start()
+
+
+
+	fun isHistoryPanelOpened() = binding.draggablePanel.isOpen()
+	fun closeHistoryPanel() = binding.draggablePanel.smoothPanelClose(300)
 
 }
