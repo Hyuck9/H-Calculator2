@@ -63,4 +63,10 @@
         <item name="maxTextSize">64sp</item>
         <item name="stepTextSize">8sp</item>
     </style>
+
+
+    <style name="WhiteDrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
 </resources>

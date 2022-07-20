@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,9 +22,11 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
             android:text="@string/header_current_input"
             android:textSize="20sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <me.hyuck9.calculator.view.custom.CalculatorEditText
             android:id="@+id/input"
@@ -33,7 +35,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scrollHorizontally="true"
-            android:text="@{StringExtensionsKt.fromHtml(viewModel.inputLiveData)}" />
+            android:text="@{StringExtensionsKt.fromHtml(viewModel.inputLiveData)}"
+            tools:text="123+456" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/output"
@@ -43,10 +46,10 @@
             android:ellipsize="end"
             android:gravity="center_vertical|end"
             android:maxLines="1"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingHorizontal="16dp"
             android:scrollHorizontally="true"
             android:text="@{viewModel.outputLiveData}"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:text="579" />
     </LinearLayout>
 </layout>

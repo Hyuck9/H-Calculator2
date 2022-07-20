@@ -4,12 +4,11 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator.ofFloat
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -36,6 +35,8 @@ class CalculatorFragment : BaseFragment() {
 
 	private lateinit var binding: FragmentCalculatorBinding
 
+	private val mainActivity by lazy { activity as MainActivity }
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -52,6 +53,7 @@ class CalculatorFragment : BaseFragment() {
 			bindListeners()
 			addObservers()
 			setupHistoryPanel()
+			addMenuProvider()
 		}
 
 		return binding.root
@@ -113,6 +115,11 @@ class CalculatorFragment : BaseFragment() {
 				}
 				animator.start()
 				// TODO: 액티비티 액션바 handling
+				mainActivity.apply {
+					title = "History"
+					supportActionBar?.setDisplayHomeAsUpEnabled(true)
+					addMenuProvider(menuProvider)
+				}
 			}
 
 			override fun onPanelClosed(view: View) {
@@ -120,11 +127,29 @@ class CalculatorFragment : BaseFragment() {
 				historyContainer.animateWeight(historyContainer.weight(), 0.0f)
 				inputField.header.isVisible = false
 				// TODO: 액티비티 액션바 handling
+				mainActivity.apply {
+					title = "Calculator"
+					supportActionBar?.setDisplayHomeAsUpEnabled(false)
+					removeMenuProvider(menuProvider)
+				}
 			}
 
 		})
 	}
 
+	private fun FragmentCalculatorBinding.addMenuProvider() {
+		mainActivity.addMenuProvider(object : MenuProvider {
+			override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {}
+
+			override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+				if (menuItem.itemId == android.R.id.home) {
+					draggablePanel.smoothPanelClose(300)
+					return true
+				}
+				return false
+			}
+		})
+	}
 
 	private val formulaOnTextSizeChangeListener =
 		object : CalculatorEditText.OnTextSizeChangeListener {
@@ -152,6 +177,18 @@ class CalculatorFragment : BaseFragment() {
 		interpolator = AccelerateDecelerateInterpolator()
 	}.start()
 
+
+	private val menuProvider = object : MenuProvider {
+		override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+			menu.findItem(R.id.delete_history).apply {
+				isVisible = true
+				setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+			}
+		}
+
+		override fun onMenuItemSelected(menuItem: MenuItem) = false
+
+	}
 
 
 	fun isHistoryPanelOpened() = binding.draggablePanel.isOpen()

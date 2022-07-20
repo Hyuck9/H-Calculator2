@@ -42,5 +42,9 @@
     <string name="text_just_now">방금 전</string>
 
     <string name="header_current_input">Current Input</string>
+    <string name="delete_history">Delete History</string>
+    <string name="text_settings">Settings</string>
+    <string name="dialog_title_delete">계산내역 전체 삭제</string>
+    <string name="dialog_message_delete">계산내역이 모두 삭제됩니다. 진행 하시겠습니까?</string>
 
 </resources>
