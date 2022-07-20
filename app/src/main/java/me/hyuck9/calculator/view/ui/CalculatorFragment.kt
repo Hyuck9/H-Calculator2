@@ -56,8 +56,6 @@ class CalculatorFragment : BaseFragment() {
 			addMenuProvider()
 		}
 
-		calcViewModel.setMockMemory()
-
 		return binding.root
 	}
 

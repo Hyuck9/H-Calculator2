@@ -134,3 +134,21 @@ fun Double.toSimpleString(): String {
 fun BigDecimal.toSimpleString(): String {
 	return toPlainString().removeSuffix(".0")
 }
+
+
+fun CharSequence.isOperatorInExpr(): Boolean {
+	val expr = this.toExpression()
+	if (expr.isNotEmpty()) {
+		if (expr[0] == '-') {
+			for (i in 1 until expr.length) {
+				if ("+-*/()".indexOf(expr[i]) != -1) return true
+			}
+		} else {
+			for (element in expr) {
+				if ("+-*/()".indexOf(element) != -1) return true
+			}
+		}
+	}
+	return false
+}
+fun CharSequence.isOperatorNotInExpr() = isOperatorInExpr().not()

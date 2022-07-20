@@ -8,5 +8,6 @@ object Constants {
 	const val BUFFER_2 = "buffer2"
 	const val BUFFER_3 = "buffer3"
 	const val BUFFER_4 = "buffer4"
+	const val BUFFER = "buffer"
 
 }

@@ -50,6 +50,7 @@
             style="@style/MemoryClearButton"
             android:text="@string/memory_clear"
             android:textStyle="bold"
+            android:onClick="@{() -> viewModel.clearMemory()}"
             app:layout_constraintBottom_toTopOf="@+id/btnOperatorMultiply"
             app:layout_constraintEnd_toStartOf="@+id/btnDel"
             app:layout_constraintStart_toEndOf="@+id/btnDigit9"

@@ -4,6 +4,7 @@ import android.app.Application
 import android.text.SpannableStringBuilder
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import me.hyuck9.calculator.common.Constants.BUFFER
 import me.hyuck9.calculator.common.Constants.BUFFER_1
 import me.hyuck9.calculator.common.Constants.BUFFER_2
 import me.hyuck9.calculator.common.Constants.BUFFER_3
@@ -32,27 +33,17 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	private val outputMutableLiveData = MutableLiveData("")
 	val outputLiveData: LiveData<String> = outputMutableLiveData
 
-	val memory1 = context.readString(BUFFER_1).asLiveData()
-	val memory2 = context.readString(BUFFER_2).asLiveData()
-	val memory3 = context.readString(BUFFER_3).asLiveData()
-	val memory4 = context.readString(BUFFER_4).asLiveData()
+	val memory = arrayOf(
+		context.readString(BUFFER_1).asLiveData(),
+		context.readString(BUFFER_2).asLiveData(),
+		context.readString(BUFFER_3).asLiveData(),
+		context.readString(BUFFER_4).asLiveData()
+	)
 
-
-	fun setMockMemory() {
-		viewModelScope.launch {
-			context.writeString(key = BUFFER_1, value = "1")
-			context.writeString(key = BUFFER_2, value = "12")
-			context.writeString(key = BUFFER_3, value = "123")
-			context.writeString(key = BUFFER_4, value = "1234")
-		}
-	}
 
 	fun setViewExpression() {
 		inputMutableLiveData.value = expressionBuilder.value!!.makeCommaExpr()
 	}
-
-
-
 
 
 	fun numberClicked(num: String) {
@@ -99,7 +90,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		}
 	}
 
-	fun equalClicked(saveHistory: (history: History)-> Unit) {
+	fun equalClicked(saveHistory: (history: History) -> Unit) {
 		if (outputMutableLiveData.value.isNullOrEmpty()) {
 			// TODO: Toast Message - 수식이 잘못되었습니다.
 			return
@@ -114,7 +105,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	}
 
-	private fun onEvaluate(saveHistory: (history: History)-> Unit) {
+	private fun onEvaluate(saveHistory: (history: History) -> Unit) {
 		val currentInput = expressionBuilder.value!!
 		if (currentInput.isNotEmpty()) {
 			Timber.i("currentInput : $currentInput")
@@ -123,14 +114,17 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 				// TODO: Toast Message - 완성되지 않은 수식입니다.
 				return
 			}
-			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
-			val history = History(expressionBuilder.value!!.maybeAppendClosedBrackets(), result.toSimpleString())
+			val result = Expression(
+				expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()
+			).calculate()
+			val history = History(
+				expressionBuilder.value!!.maybeAppendClosedBrackets(),
+				result.toSimpleString()
+			)
 			saveHistory.invoke(history)
 			setExpression(result.toSimpleString())
 		}
 	}
-
-
 
 
 	fun calculateOutput() {
@@ -138,7 +132,9 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		if (currentInput.matches(numRegex)) {
 			outputMutableLiveData.value = ""
 		} else if (currentInput.isNotEmpty()) {
-			val result = Expression(expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()).calculate()
+			val result = Expression(
+				expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()
+			).calculate()
 			if (result.isNaN() || result.isInfinite()) {
 				// TODO: 오류 표시
 			} else {
@@ -150,9 +146,6 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	}
 
 
-
-
-
 	private fun appendParens() {
 		if (isMoreThanLeftParen() && checkLastOperatorAndLeftParen().not()) {
 			appendExpression(")")
@@ -162,14 +155,14 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 			appendExpression("(")
 		}
 	}
+
 	private fun isMoreThanLeftParen() = expressionBuilder.value!!.run {
 		return@run getLeftParenCount() - getRightParenCount() > 0
 	}
+
 	private fun getLastInput() = expressionBuilder.value!!.lastOrNull() ?: CHAR_OF_EMPTY_EXPRESSION
 	private fun checkLastOperatorAndLeftParen() = "s(×÷−+".contains(getLastInput())
 	private fun isLastInputRightParen() = ")".contains(getLastInput())
-
-
 
 
 	private fun appendDoubleO() {
@@ -181,19 +174,18 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 			appendExpression("00")
 		}
 	}
+
 	private fun isFirstCharAtOperandZero() = if (expressionBuilder.value!!.length >= 2) {
-		"×÷−+".contains(expressionBuilder.value!!.run{this[length - 2]}) && getLastInput() == '0'
+		"×÷−+".contains(expressionBuilder.value!!.run { this[length - 2] }) && getLastInput() == '0'
 	} else {
 		expressionBuilder.value!!.singleOrNull() == '0'
 	}
-	private fun isFirstOperandOrEmpty() = "s×÷−+".contains(getLastInput())
 
+	private fun isFirstOperandOrEmpty() = "s×÷−+".contains(getLastInput())
 
 
 	private fun isStateResult() = currentState == CalculateState.RESULT
 	private fun isStateNotResult() = isStateResult().not()
-
-
 
 
 	fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
@@ -207,12 +199,50 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	}
 
 
+	fun saveBuffer(index: Int) {
+		if (memory[index].value.isNullOrEmpty()) {    // 버퍼가 비어있는 경우 - 저장
+			if (expressionBuilder.value!!.isOperatorNotInExpr()) {    // 계산식에 연산자가 없을 때에만 버퍼에 저장
+				if (expressionBuilder.value.isNullOrEmpty()) {
+					// TODO: 저장할 값이 없습니다.
+				} else if (expressionBuilder.value!!.isError || currentState == CalculateState.ERROR) {
+					// TODO: 저장할 수 없습니다.
+				} else {    // 버퍼 저장
+					viewModelScope.launch {
+						context.writeString(
+							key = "$BUFFER${index + 1}",
+							value = expressionBuilder.value!!.toExpression()
+						)
+					}
+				}
+			} else {    // 계산식 저장 불가
+				// TODO: 계산식은 저장할 수 없습니다. \n계산 완료 후 저장해 주세요.
+			}
+		} else {    // 버퍼에 값이 있는 경우 - 값 불러오기
+
+		}
+	}
+
+	fun deleteMemoryBuffer(index: Int): Boolean {
+		viewModelScope.launch {
+			context.writeString(
+				key = "$BUFFER${index + 1}",
+				value = ""
+			)
+		}
+		return true
+	}
+
+	fun clearMemory() = viewModelScope.launch {
+		context.writeString(key = BUFFER_1, value = "")
+		context.writeString(key = BUFFER_2, value = "")
+		context.writeString(key = BUFFER_3, value = "")
+		context.writeString(key = BUFFER_4, value = "")
+	}
+
 
 	private fun appendExpression(input: String) {
 		expressionBuilder.value!!.append(input).setExpressionBuilder()
 	}
-
-
 
 
 	private fun SpannableStringBuilder.setExpressionBuilder() {

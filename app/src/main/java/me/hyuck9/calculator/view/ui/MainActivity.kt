@@ -67,6 +67,9 @@ class MainActivity : BaseActivity() {
 			.setIcon(R.drawable.ic_delete_history)
 			.setPositiveButton(android.R.string.ok) { _, _ ->
 				historyViewModel.deleteAllHistory()
+				if (calculatorFragment.isHistoryPanelOpened()) {
+					calculatorFragment.closeHistoryPanel()
+				}
 			}
 			.setNegativeButton(android.R.string.cancel) { dialog, _ ->
 				dialog.dismiss()
