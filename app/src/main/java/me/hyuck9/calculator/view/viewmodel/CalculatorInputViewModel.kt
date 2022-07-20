@@ -122,7 +122,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 				result.toSimpleString()
 			)
 			saveHistory.invoke(history)
-			setExpression(result.toSimpleString())
+			setExpression(result.toSimpleString().toViewExpression())
 		}
 	}
 
@@ -194,11 +194,6 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	}
 
 
-	fun setExpression(expr: String = "") {
-		expressionBuilder.value = ExpressionBuilder(expr)
-	}
-
-
 	fun saveBuffer(index: Int) {
 		if (memory[index].value.isNullOrEmpty()) {    // 버퍼가 비어있는 경우 - 저장
 			if (expressionBuilder.value!!.isOperatorNotInExpr()) {    // 계산식에 연산자가 없을 때에만 버퍼에 저장
@@ -218,7 +213,17 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 				// TODO: 계산식은 저장할 수 없습니다. \n계산 완료 후 저장해 주세요.
 			}
 		} else {    // 버퍼에 값이 있는 경우 - 값 불러오기
+			var bufferedValue = memory[index].value!!
+			if (bufferedValue.contains("-")) bufferedValue = "($bufferedValue)"
+			appendBufferedValue(bufferedValue)
+		}
+	}
 
+	private fun appendBufferedValue(bufferedValue: String) {
+		if (checkLastOperatorAndLeftParen()) {
+			appendExpression(bufferedValue)
+		} else {
+			// TODO: 먼저 연산자를 입력해 주세요.
 		}
 	}
 
@@ -242,6 +247,10 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	private fun appendExpression(input: String) {
 		expressionBuilder.value!!.append(input).setExpressionBuilder()
+	}
+
+	fun setExpression(expr: String = "") {
+		expressionBuilder.value = ExpressionBuilder(expr)
 	}
 
 
