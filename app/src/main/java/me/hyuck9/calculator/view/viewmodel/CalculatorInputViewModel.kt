@@ -1,10 +1,16 @@
 package me.hyuck9.calculator.view.viewmodel
 
+import android.app.Application
 import android.text.SpannableStringBuilder
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
+import me.hyuck9.calculator.common.Constants.BUFFER_1
+import me.hyuck9.calculator.common.Constants.BUFFER_2
+import me.hyuck9.calculator.common.Constants.BUFFER_3
+import me.hyuck9.calculator.common.Constants.BUFFER_4
 import me.hyuck9.calculator.common.Constants.CHAR_OF_EMPTY_EXPRESSION
+import me.hyuck9.calculator.data.datastore.readString
+import me.hyuck9.calculator.data.datastore.writeString
 import me.hyuck9.calculator.data.db.entity.History
 import me.hyuck9.calculator.evaluation.ExpressionBuilder
 import me.hyuck9.calculator.extensions.*
@@ -12,7 +18,7 @@ import me.hyuck9.calculator.model.CalculateState
 import org.mariuszgromada.math.mxparser.Expression
 import timber.log.Timber
 
-class CalculatorInputViewModel : ViewModel() {
+class CalculatorInputViewModel(val context: Application) : AndroidViewModel(context) {
 
 	private val numRegex = "-?[0-9]+\\.?[0-9]*".toRegex()
 	private var currentState = CalculateState.INPUT
@@ -26,7 +32,20 @@ class CalculatorInputViewModel : ViewModel() {
 	private val outputMutableLiveData = MutableLiveData("")
 	val outputLiveData: LiveData<String> = outputMutableLiveData
 
+	val memory1 = context.readString(BUFFER_1).asLiveData()
+	val memory2 = context.readString(BUFFER_2).asLiveData()
+	val memory3 = context.readString(BUFFER_3).asLiveData()
+	val memory4 = context.readString(BUFFER_4).asLiveData()
 
+
+	fun setMockMemory() {
+		viewModelScope.launch {
+			context.writeString(key = BUFFER_1, value = "1")
+			context.writeString(key = BUFFER_2, value = "12")
+			context.writeString(key = BUFFER_3, value = "123")
+			context.writeString(key = BUFFER_4, value = "1234")
+		}
+	}
 
 	fun setViewExpression() {
 		inputMutableLiveData.value = expressionBuilder.value!!.makeCommaExpr()

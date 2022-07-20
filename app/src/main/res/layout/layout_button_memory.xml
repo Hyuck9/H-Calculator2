@@ -9,6 +9,8 @@
             name="viewModel"
             type="me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel" />
 
+        <import type="me.hyuck9.calculator.extensions.ExpressionExtensionsKt" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,13 +43,16 @@
                     android:layout_height="wrap_content"
                     android:text="M1"
                     android:textColor="@color/md_brown_400"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_m1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:lines="1"
+                    android:text="@{ExpressionExtensionsKt.addComma(viewModel.memory1)}"
                     android:textColor="@color/md_brown_400"
                     android:textSize="16sp"
                     tools:text="123" />
@@ -81,13 +86,16 @@
                     android:layout_height="wrap_content"
                     android:text="M2"
                     android:textColor="@color/md_deep_orange_400"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_m2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:lines="1"
+                    android:text="@{ExpressionExtensionsKt.addComma(viewModel.memory2)}"
                     android:textColor="@color/md_deep_orange_400"
                     android:textSize="16sp"
                     tools:text="456" />
@@ -121,13 +129,16 @@
                     android:layout_height="wrap_content"
                     android:text="M3"
                     android:textColor="@color/md_cyan_400"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_m3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:lines="1"
+                    android:text="@{ExpressionExtensionsKt.addComma(viewModel.memory3)}"
                     android:textColor="@color/md_cyan_400"
                     android:textSize="16sp"
                     tools:text="123" />
@@ -161,13 +172,16 @@
                     android:layout_height="wrap_content"
                     android:text="M4"
                     android:textColor="@color/md_green_400"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_m4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_medium"
                     android:lines="1"
+                    android:text="@{ExpressionExtensionsKt.addComma(viewModel.memory4)}"
                     android:textColor="@color/md_green_400"
                     android:textSize="16sp"
                     tools:text="456" />

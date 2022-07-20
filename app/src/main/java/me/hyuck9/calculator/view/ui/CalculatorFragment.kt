@@ -56,6 +56,8 @@ class CalculatorFragment : BaseFragment() {
 			addMenuProvider()
 		}
 
+		calcViewModel.setMockMemory()
+
 		return binding.root
 	}
 
@@ -114,7 +116,6 @@ class CalculatorFragment : BaseFragment() {
 					historyContainer.updateWeight(1.0f - it.animatedValue as Float)
 				}
 				animator.start()
-				// TODO: 액티비티 액션바 handling
 				mainActivity.apply {
 					title = "History"
 					supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -126,7 +127,6 @@ class CalculatorFragment : BaseFragment() {
 				inputField.root.animateWeight(inputField.root.weight(), 1.0f)
 				historyContainer.animateWeight(historyContainer.weight(), 0.0f)
 				inputField.header.isVisible = false
-				// TODO: 액티비티 액션바 handling
 				mainActivity.apply {
 					title = "Calculator"
 					supportActionBar?.setDisplayHomeAsUpEnabled(false)

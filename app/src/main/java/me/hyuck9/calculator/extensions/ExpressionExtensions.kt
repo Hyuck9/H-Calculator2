@@ -34,7 +34,8 @@ fun CharSequence.toExpression(): String {
 
 
 
-fun String.addComma(): String {
+fun String?.addComma(): String {
+	if (isNullOrEmpty()) return ""
 	val strNumber: String
 	var strDecimal = ""
 	if (contains(".")) {
