@@ -2,6 +2,7 @@ package me.hyuck9.calculator.view.viewmodel
 
 import android.app.Application
 import android.text.SpannableStringBuilder
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import me.hyuck9.calculator.R
@@ -99,7 +100,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	fun equalClicked(saveHistory: (history: History) -> Unit) {
 		if (outputMutableLiveData.value.isNullOrEmpty()) {
-			_toastMessage.value = appStr(R.string.error_formula_is_wrong)
+			showToastMessage(R.string.error_formula_is_wrong)
 			return
 		}
 
@@ -199,9 +200,9 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		if (memory[index].value.isNullOrEmpty()) {    // 버퍼가 비어있는 경우 - 저장
 			if (expressionBuilder.value!!.isOperatorNotInExpr()) {    // 계산식에 연산자가 없을 때에만 버퍼에 저장
 				if (expressionBuilder.value.isNullOrEmpty()) {
-					_toastMessage.value = appStr(R.string.error_nothing_to_save)
+					showToastMessage(R.string.error_nothing_to_save)
 				} else if (expressionBuilder.value!!.isError || currentState == CalculateState.ERROR) {
-					_toastMessage.value = appStr(R.string.error_cannot_save)
+					showToastMessage(R.string.error_cannot_save)
 				} else {    // 버퍼 저장
 					viewModelScope.launch {
 						context.writeString(
@@ -211,7 +212,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 					}
 				}
 			} else {    // 계산식 저장 불가
-				_toastMessage.value = appStr(R.string.error_formula_cannot_save)
+				showToastMessage(R.string.error_formula_cannot_save)
 			}
 		} else {    // 버퍼에 값이 있는 경우 - 값 불러오기
 			var bufferedValue = memory[index].value!!
@@ -224,7 +225,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		if (checkLastOperatorAndLeftParen()) {
 			appendExpression(bufferedValue)
 		} else {
-			_toastMessage.value = appStr(R.string.error_operator_first)
+			showToastMessage(R.string.error_operator_first)
 		}
 	}
 
@@ -243,7 +244,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		context.writeString(key = BUFFER_2, value = "")
 		context.writeString(key = BUFFER_3, value = "")
 		context.writeString(key = BUFFER_4, value = "")
-		_toastMessage.value = appStr(R.string.message_all_memory_clear)
+		showToastMessage(R.string.message_all_memory_clear)
 	}
 
 
@@ -258,6 +259,12 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	private fun SpannableStringBuilder.setExpressionBuilder() {
 		expressionBuilder.value = this as ExpressionBuilder
+	}
+
+
+
+	fun showToastMessage(@StringRes strResId: Int) {
+		_toastMessage.value = appStr(strResId)
 	}
 
 }

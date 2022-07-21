@@ -48,6 +48,7 @@
     <string name="dialog_message_delete">계산내역이 모두 삭제됩니다. 진행 하시겠습니까?</string>
 
     <string name="message_all_memory_clear">모든 메모리 초기화</string>
+    <string name="message_back_button_press">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
 
 
     <string name="error_nothing_to_save">저장할 값이 없습니다.</string>

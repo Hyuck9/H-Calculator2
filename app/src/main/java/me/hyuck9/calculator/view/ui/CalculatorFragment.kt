@@ -28,7 +28,7 @@ import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
 @AndroidEntryPoint
 class CalculatorFragment : BaseFragment() {
 
-	private val calcViewModel by viewModels<CalculatorInputViewModel>()
+	private val calcViewModel by activityViewModels<CalculatorInputViewModel>()
 	private val historyViewModel by activityViewModels<HistoryViewModel>()
 
 	private val historyFragment = HistoryFragment()

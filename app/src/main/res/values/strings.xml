@@ -48,6 +48,7 @@
     <string name="dialog_message_delete">Your Calculation History will be deleted. Do you want to proceed?</string>
 
     <string name="message_all_memory_clear">All memories will be reset.</string>
+    <string name="message_back_button_press">To quit, press the \'Back\' button again</string>
 
 
     <string name="error_nothing_to_save">Nothing to save</string>

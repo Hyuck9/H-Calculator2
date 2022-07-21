@@ -6,9 +6,11 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import me.hyuck9.calculator.App
 import me.hyuck9.calculator.R
 import me.hyuck9.calculator.databinding.ActivityMainBinding
 import me.hyuck9.calculator.view.base.BaseActivity
+import me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel
 import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
 import splitties.resources.str
 
@@ -22,6 +24,9 @@ class MainActivity : BaseActivity() {
 			.fragments[0] as CalculatorFragment
 	}
 	private val historyViewModel by viewModels<HistoryViewModel>()
+	private val calcViewModel by viewModels<CalculatorInputViewModel>()
+
+	private var backKeyPressedTime: Long = 0
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -39,7 +44,7 @@ class MainActivity : BaseActivity() {
 		menuInflater.inflate(R.menu.history_menu, menu)
 		return super.onCreateOptionsMenu(menu)
 	}
-	
+
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		when (item.itemId) {
 			R.id.delete_history -> {
@@ -53,10 +58,17 @@ class MainActivity : BaseActivity() {
 
 		if (calculatorFragment.isHistoryPanelOpened()) {
 			calculatorFragment.closeHistoryPanel()
-			return
+		} else {
+			if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+				backKeyPressedTime = System.currentTimeMillis()
+				calcViewModel.showToastMessage(R.string.message_back_button_press)
+			} else {
+				App.toast?.cancel()
+				// TODO: 광고 띄우거나....
+				super.onBackPressed()
+			}
 		}
 
-		super.onBackPressed()
 	}
 
 
