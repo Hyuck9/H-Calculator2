@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
 			} else {
 				App.toast?.cancel()
 				// TODO: 광고 띄우거나....
-				super.onBackPressed()
+				finish()
 			}
 		}
 
