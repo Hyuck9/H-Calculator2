@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.hyuck9.calculator.R
 import me.hyuck9.calculator.databinding.FragmentHistoryBinding
 import me.hyuck9.calculator.extensions.observeLiveData
+import me.hyuck9.calculator.extensions.toViewExpression
 import me.hyuck9.calculator.view.adapter.HistoryAdapter
 import me.hyuck9.calculator.view.base.BaseFragment
 import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
@@ -72,13 +74,14 @@ class HistoryFragment : BaseFragment() {
 		}
 		historyAdapter.onAnswerClick = { history ->
 			Timber.i("history : $history")
-			historyViewModel.selectHistory(history.answer)
+			historyViewModel.selectHistory(history.answer.toViewExpression())
 		}
 
 	}
 
 	private fun FragmentHistoryBinding.addObservers() {
 		observeLiveData(historyViewModel.histories) { histories ->
+			noHistory.isVisible = histories.isEmpty()
 			historyAdapter.updateList(histories)
 		}
 	}

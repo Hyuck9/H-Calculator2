@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">H-Calculator</string>
+
+    <string name="digit_00">00</string>
+    <string name="digit_0">0</string>
+    <string name="digit_1">1</string>
+    <string name="digit_2">2</string>
+    <string name="digit_3">3</string>
+    <string name="digit_4">4</string>
+    <string name="digit_5">5</string>
+    <string name="digit_6">6</string>
+    <string name="digit_7">7</string>
+    <string name="digit_8">8</string>
+    <string name="digit_9">9</string>
+
+    <string name="backspace">⌫</string>
+
+    <string name="op_add">+</string>
+    <string name="op_sub">−</string>
+    <string name="op_div">÷</string>
+    <string name="op_mul">×</string>
+    <string name="op_perc">%</string>
+    <string name="op_pow">^</string>
+    <string name="op_sqrt">√</string>
+
+    <string name="lparens">(</string>
+    <string name="rparens">)</string>
+    <string name="parens">( )</string>
+    <string name="decimal_point">.</string>
+    <string name="delete">←</string>
+    <string name="equal">=</string>
+    <string name="infinity">∞</string>
+    <string name="memory_clear">MC</string>
+    <string name="error_nan">NaN</string>
+    <string name="error_syntax">Error</string>
+
+    <string name="text_days">%1$d일 전</string>
+    <string name="text_yesterday">어제</string>
+    <string name="text_today">오늘</string>
+    <string name="text_hours">%1$d시간 전</string>
+    <string name="text_minutes">%1$d분 전</string>
+    <string name="text_just_now">방금 전</string>
+
+    <string name="header_current_input">현재 입력값</string>
+    <string name="delete_history">계산내역 삭제</string>
+    <string name="text_settings">설정</string>
+    <string name="dialog_title_delete">계산내역 전체 삭제</string>
+    <string name="dialog_message_delete">계산내역이 모두 삭제됩니다. 진행 하시겠습니까?</string>
+
+    <string name="message_all_memory_clear">모든 메모리 초기화</string>
+
+
+    <string name="error_nothing_to_save">저장할 값이 없습니다.</string>
+    <string name="error_cannot_save">저장할 수 없습니다.</string>
+    <string name="error_formula_cannot_save">계산식은 저장할 수 없습니다.\n계산 완료 후 저장해 주세요.</string>
+    <string name="error_maximum_number">최대자리수(15개)를 초과했습니다.</string>
+    <string name="error_operator_first">먼저 연산자를 입력해 주세요.</string>
+    <string name="error_formula_is_wrong">수식이 잘못되었습니다.</string>
+    <string name="error_maximum_character">글자를 최대 500자 까지 입력할 수 있습니다.</string>
+    <string name="error_over_the_limit">계산 가능한 값을 초과했습니다.</string>
+    <string name="text_no_history">히스토리 없음</string>
+
+</resources>

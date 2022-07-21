@@ -35,14 +35,6 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 		notifyDataSetChanged()
 	}
 
-	fun remove(position: Int) {
-		data.removeAt(position)
-	}
-	fun remove(item: History) {
-		data.remove(item)
-	}
-
-
 	inner class ViewHolder(private val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
 		fun bind(item: History) {
 			binding.apply {

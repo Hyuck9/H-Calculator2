@@ -33,6 +33,7 @@
             style="@style/CustomEditText.Input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="false"
             android:layout_weight="1"
             android:scrollHorizontally="true"
             android:text="@{StringExtensionsKt.fromHtml(viewModel.inputLiveData)}"

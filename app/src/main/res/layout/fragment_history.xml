@@ -4,8 +4,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:background="@color/dark_grey"
         android:layout_height="match_parent"
+        android:background="@color/dark_grey"
         tools:context=".view.ui.HistoryFragment">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -13,6 +13,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_history" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/noHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_history"
+            android:drawableTint="@color/white"
+            android:textColor="@color/md_grey_400"
+            android:layout_gravity="center"
+            android:text="@string/text_no_history" />
 
     </FrameLayout>
 </layout>
