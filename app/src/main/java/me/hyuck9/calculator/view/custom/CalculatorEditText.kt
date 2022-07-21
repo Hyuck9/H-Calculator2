@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import me.hyuck9.calculator.R
+import timber.log.Timber
 
 class CalculatorEditText : AppCompatEditText {
 
@@ -92,6 +93,9 @@ class CalculatorEditText : AppCompatEditText {
 			textLength?.let { setSelection(it) }
 		}
 		setTextSize(TypedValue.COMPLEX_UNIT_PX, getVariableTextSize(text.toString()))
+		Timber.i("textLength : $textLength, textSize : $textSize")
+		Timber.i("getVariableTextSize : ${getVariableTextSize(text.toString())}")
+		Timber.i("text : ${text.toString()}")
 	}
 
 	override fun setTextSize(unit: Int, size: Float) {

@@ -4,6 +4,7 @@ import android.app.Application
 import android.text.SpannableStringBuilder
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import me.hyuck9.calculator.R
 import me.hyuck9.calculator.common.Constants.BUFFER
 import me.hyuck9.calculator.common.Constants.BUFFER_1
 import me.hyuck9.calculator.common.Constants.BUFFER_2
@@ -17,6 +18,7 @@ import me.hyuck9.calculator.evaluation.ExpressionBuilder
 import me.hyuck9.calculator.extensions.*
 import me.hyuck9.calculator.model.CalculateState
 import org.mariuszgromada.math.mxparser.Expression
+import splitties.resources.appStr
 import timber.log.Timber
 
 class CalculatorInputViewModel(val context: Application) : AndroidViewModel(context) {
@@ -32,6 +34,11 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	private val outputMutableLiveData = MutableLiveData("")
 	val outputLiveData: LiveData<String> = outputMutableLiveData
+
+	private val _toastMessage = MutableLiveData("")
+	val toastMessage: LiveData<String> = _toastMessage
+
+
 
 	val memory = arrayOf(
 		context.readString(BUFFER_1).asLiveData(),
@@ -92,11 +99,9 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	fun equalClicked(saveHistory: (history: History) -> Unit) {
 		if (outputMutableLiveData.value.isNullOrEmpty()) {
-			// TODO: Toast Message - 수식이 잘못되었습니다.
+			_toastMessage.value = appStr(R.string.error_formula_is_wrong)
 			return
 		}
-
-//		inputMutableLiveData.value = inputMutableLiveData.value!!.maybeAppendClosedBrackets()
 
 		if (currentState == CalculateState.INPUT) {
 			// TODO: setDisplayState(CalculatorState.EVALUATE) -> Display 상태별 글자 색 변경
@@ -106,37 +111,33 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	}
 
 	private fun onEvaluate(saveHistory: (history: History) -> Unit) {
-		val currentInput = expressionBuilder.value!!
+		var currentInput = expressionBuilder.value!!.toString()
+		val output = outputMutableLiveData.value!!.removeComma()
 		if (currentInput.isNotEmpty()) {
 			Timber.i("currentInput : $currentInput")
 			if ("×÷−+".contains(currentInput.last())) {
-				Timber.i("last : ${currentInput.last()}")
-				// TODO: Toast Message - 완성되지 않은 수식입니다.
-				return
+				currentInput = currentInput.substring(0, currentInput.length - 1)
 			}
-			val result = Expression(
-				expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()
-			).calculate()
-			val history = History(
-				expressionBuilder.value!!.maybeAppendClosedBrackets(),
-				result.toSimpleString()
-			)
-			saveHistory.invoke(history)
-			setExpression(result.toSimpleString().toViewExpression())
+			setExpression(output.toViewExpression())
+			if (currentInput.isOperatorInExpr()) {
+				val history = History(currentInput.maybeAppendClosedBrackets(), output)
+				saveHistory.invoke(history)
+			}
 		}
 	}
 
 
 	fun calculateOutput() {
 		val currentInput = expressionBuilder.value!!
-		if (currentInput.matches(numRegex)) {
-			outputMutableLiveData.value = ""
-		} else if (currentInput.isNotEmpty()) {
+		if (currentInput.isNotEmpty()) {
+			if ("×÷−+".contains(currentInput.last())) {
+				return
+			}
 			val result = Expression(
 				expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()
 			).calculate()
 			if (result.isNaN() || result.isInfinite()) {
-				// TODO: 오류 표시
+				outputMutableLiveData.value = ""
 			} else {
 				outputMutableLiveData.value = result.toSimpleString().makeCommaExpr()
 			}
@@ -198,9 +199,9 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		if (memory[index].value.isNullOrEmpty()) {    // 버퍼가 비어있는 경우 - 저장
 			if (expressionBuilder.value!!.isOperatorNotInExpr()) {    // 계산식에 연산자가 없을 때에만 버퍼에 저장
 				if (expressionBuilder.value.isNullOrEmpty()) {
-					// TODO: 저장할 값이 없습니다.
+					_toastMessage.value = appStr(R.string.error_nothing_to_save)
 				} else if (expressionBuilder.value!!.isError || currentState == CalculateState.ERROR) {
-					// TODO: 저장할 수 없습니다.
+					_toastMessage.value = appStr(R.string.error_cannot_save)
 				} else {    // 버퍼 저장
 					viewModelScope.launch {
 						context.writeString(
@@ -210,7 +211,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 					}
 				}
 			} else {    // 계산식 저장 불가
-				// TODO: 계산식은 저장할 수 없습니다. \n계산 완료 후 저장해 주세요.
+				_toastMessage.value = appStr(R.string.error_formula_cannot_save)
 			}
 		} else {    // 버퍼에 값이 있는 경우 - 값 불러오기
 			var bufferedValue = memory[index].value!!
@@ -223,7 +224,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		if (checkLastOperatorAndLeftParen()) {
 			appendExpression(bufferedValue)
 		} else {
-			// TODO: 먼저 연산자를 입력해 주세요.
+			_toastMessage.value = appStr(R.string.error_operator_first)
 		}
 	}
 
@@ -242,6 +243,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		context.writeString(key = BUFFER_2, value = "")
 		context.writeString(key = BUFFER_3, value = "")
 		context.writeString(key = BUFFER_4, value = "")
+		_toastMessage.value = appStr(R.string.message_all_memory_clear)
 	}
 
 
