@@ -18,7 +18,7 @@ import me.hyuck9.calculator.data.db.entity.History
 import me.hyuck9.calculator.evaluation.ExpressionBuilder
 import me.hyuck9.calculator.extensions.*
 import me.hyuck9.calculator.model.CalculateState
-import org.mariuszgromada.math.mxparser.Expression
+import org.javia.arity.Symbols
 import splitties.resources.appStr
 import timber.log.Timber
 
@@ -105,7 +105,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		}
 
 		if (currentState == CalculateState.INPUT) {
-			// TODO: setDisplayState(CalculatorState.EVALUATE) -> Display 상태별 글자 색 변경
+			setDisplayState(CalculateState.EVALUATE)
 			onEvaluate(saveHistory)
 		}
 
@@ -131,12 +131,12 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	fun calculateOutput() {
 		val currentInput = expressionBuilder.value!!
 		if (currentInput.isNotEmpty()) {
-			if ("×÷−+".contains(currentInput.last())) {
+			if ("(×÷−+".contains(currentInput.last())) {
 				return
 			}
-			val result = Expression(
+			val result = Symbols().eval(
 				expressionBuilder.value!!.toExpression().maybeAppendClosedBrackets()
-			).calculate()
+			)
 			if (result.isNaN() || result.isInfinite()) {
 				outputMutableLiveData.value = ""
 			} else {
@@ -229,6 +229,17 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 		}
 	}
 
+	fun setDisplayState(state: CalculateState) {
+		if (currentState != state) {
+			currentState = state
+			if (state == CalculateState.ERROR) {
+				expressionBuilder.value!!.isError = true
+			} else {
+				// TODO: setColor
+			}
+		}
+	}
+
 	fun deleteMemoryBuffer(index: Int): Boolean {
 		viewModelScope.launch {
 			context.writeString(
@@ -253,7 +264,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	}
 
 	fun setExpression(expr: String = "") {
-		expressionBuilder.value = ExpressionBuilder(expr)
+		expressionBuilder.value = ExpressionBuilder(expr, isEdited())
 	}
 
 

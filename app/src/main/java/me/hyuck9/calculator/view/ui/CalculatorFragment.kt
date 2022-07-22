@@ -87,6 +87,7 @@ class CalculatorFragment : BaseFragment() {
 		}
 		observeLiveData(calcViewModel.expressionLiveData) {
 			calcViewModel.setViewExpression()
+			calcViewModel.setInputState()
 		}
 		observeLiveData(historyViewModel.selectedHistory) {
 			calcViewModel.setExpression(it)

@@ -90,6 +90,7 @@ class ExpressionBuilder(text: CharSequence = "", var isEdited: Boolean = false) 
 		}
 
 		if ((!isEdited || isError) && appendExpr.isNotEmpty()) {
+			startIndex = 0	// equal 버튼 눌러 결과 확인 또는 Error 이후 Operator가 아닌 입력이 들어오면 startIndex를 0으로 돌려 화면 초기화
 			isEdited = true
 			isError = false
 		}
