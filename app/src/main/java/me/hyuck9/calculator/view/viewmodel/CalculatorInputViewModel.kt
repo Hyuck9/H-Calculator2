@@ -39,6 +39,8 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	private val _toastMessage = MutableLiveData("")
 	val toastMessage: LiveData<String> = _toastMessage
 
+	var isOverLimit = false
+
 
 
 	val memory = arrayOf(
@@ -55,27 +57,44 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 
 	fun numberClicked(num: String) {
-		// TODO: 글자수 제한 체크
-		if (isLastInputRightParen() && isStateNotResult()) {
-			appendExpression("×")
-		}
+		if (expressionBuilder.value!!.checkExprMaxLength()) {
+			if (expressionBuilder.value!!.checkOperandMaxLength() || currentState == CalculateState.RESULT) {
+				if (isLastInputRightParen() && isStateNotResult()) {
+					appendExpression("×")
+				}
 
-		if (num == "00") {
-			appendDoubleO()
+				if (num == "00") {
+					appendDouble0()
+				} else {
+					appendExpression(num)
+				}
+			} else {
+				showToastMessage(R.string.error_maximum_number)
+			}
 		} else {
-			appendExpression(num)
+			showToastMessage(R.string.error_maximum_character)
 		}
 	}
 
 	fun operatorClicked(oper: String) {
-		// TODO: 에러 체크
-		// TODO: 글자수 제한 체크
-		appendExpression(oper)
+		if (expressionBuilder.value!!.isError) {
+			Timber.i("Expression is Error => [Clear Expression]")
+			setExpression()
+			return
+		}
+		if (expressionBuilder.value!!.checkExprMaxLength()) {
+			appendExpression(oper)
+		} else {
+			showToastMessage(R.string.error_maximum_character)
+		}
 	}
 
 	fun parensClicked() {
-		// TODO: 글자수 제한 체크
-		appendParens()
+		if (expressionBuilder.value!!.checkExprMaxLength()) {
+			appendParens()
+		} else {
+			showToastMessage(R.string.error_maximum_character)
+		}
 	}
 
 	fun clearAll(): Boolean {
@@ -89,11 +108,10 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	fun backspaceClicked() {
 		with(expressionBuilder.value!!) {
 			isError = false
-			// TODO: isError .....
-			// TODO: isEqual .....
 			// TODO: memory .....
 			if (isNotEmpty()) {
 				delete(length - 1, length).setExpressionBuilder()
+				// TODO: 지운 후 연산자만 남았을 경우 result 값 관련 처리
 			}
 		}
 	}
@@ -101,6 +119,10 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	fun equalClicked(saveHistory: (history: History) -> Unit) {
 		if (outputMutableLiveData.value.isNullOrEmpty()) {
 			showToastMessage(R.string.error_formula_is_wrong)
+			return
+		}
+		if (isOverLimit) {
+			showToastMessage(R.string.error_over_the_limit)
 			return
 		}
 
@@ -140,7 +162,12 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 			if (result.isNaN() || result.isInfinite()) {
 				outputMutableLiveData.value = ""
 			} else {
-				outputMutableLiveData.value = result.toSimpleString().makeCommaExpr()
+				isOverLimit = result.isOverLimit()
+				if (isOverLimit) {
+					outputMutableLiveData.value = appStr(R.string.error_over_the_limit)
+				} else {
+					outputMutableLiveData.value = result.toSimpleString().makeCommaExpr()
+				}
 			}
 		} else {
 			outputMutableLiveData.value = ""
@@ -167,10 +194,10 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	private fun isLastInputRightParen() = ")".contains(getLastInput())
 
 
-	private fun appendDoubleO() {
+	private fun appendDouble0() {
 		if (isFirstCharAtOperandZero()) {
 			Timber.i("First char at operand is Zero")
-		} else if (isFirstOperandOrEmpty()) {
+		} else if (isFirstOperandOrEmpty() || expressionBuilder.value!!.checkDouble0OperandMaxLength()) {
 			appendExpression("0")
 		} else {
 			appendExpression("00")
@@ -190,7 +217,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	private fun isStateNotResult() = isStateResult().not()
 
 
-	fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
+	private fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
 	fun setInputState() {
 		currentState = CalculateState.INPUT
 	}
@@ -223,7 +250,11 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 	private fun appendBufferedValue(bufferedValue: String) {
 		if (checkLastOperatorAndLeftParen()) {
-			appendExpression(bufferedValue)
+			if (expressionBuilder.value!!.checkExprMaxLength()) {
+				appendExpression(bufferedValue)
+			} else {
+				showToastMessage(R.string.error_maximum_character)
+			}
 		} else {
 			showToastMessage(R.string.error_operator_first)
 		}

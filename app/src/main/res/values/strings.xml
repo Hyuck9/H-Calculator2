@@ -57,7 +57,7 @@
     <string name="error_maximum_number">Maximum number of digits(15) exceeded.</string>
     <string name="error_operator_first">Please type in the operator first.</string>
     <string name="error_formula_is_wrong">Wrong format.</string>
-    <string name="error_maximum_character">Up to 500 characters available.</string>
+    <string name="error_maximum_character">Up to 200 characters available.</string>
     <string name="error_over_the_limit">The calculation is over the limit.</string>
     <string name="text_no_history">No History</string>
 

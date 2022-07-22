@@ -4,7 +4,7 @@ import androidx.core.text.isDigitsOnly
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
-val operators = listOf('^', '÷', '×', '+', '−', '(', ')')
+val operators = listOf('÷', '×', '+', '−', '(', ')')
 
 fun CharSequence.toViewExpression(): String {
 	return toString()
@@ -48,7 +48,6 @@ fun String?.addComma(): String {
 }
 fun String.removeComma() = this.replace(",", "")
 fun String.removeCommaToBigInteger() = this.removeComma().toBigInteger()
-fun String.removeCommaToDouble() = this.removeComma().toDouble()
 fun CharSequence.makeCommaExpr(): String {
 	var exprString = ""
 	val array = separateOperator()
@@ -59,10 +58,36 @@ fun CharSequence.makeCommaExpr(): String {
 	}
 	return exprString
 }
+fun CharSequence.checkOperandMaxLength(): Boolean {
+	val array = separateSimpleOperator()
+	return array.last().length < 15
+}
+fun CharSequence.checkDouble0OperandMaxLength(): Boolean {
+	val array = separateSimpleOperator()
+	return array.last().length >= 14
+}
+fun CharSequence.checkExprMaxLength(): Boolean = length < 200
 
 
 
-
+fun CharSequence.separateSimpleOperator(): ArrayList<String> {
+	val array = arrayListOf<String>()
+	var offset = 0
+	forEachIndexed { index, char ->
+		if (operators.contains(char)) {    // 이번 char가 operator인 경우
+			if (substring(offset, index).isNumeric()) {    // 이번 char 전까지의 문자열이 숫자라면
+				array.add(substring(offset, index))        // 숫자 저장
+			}
+			offset = index + 1                            // 다음 operator까지 자를 시작 지점 저장
+		}
+	}
+	if (offset != length) {							// 계산식 마지막에 숫자가 있는 경우
+		array.add(substring(offset, length))		// 숫자 저장
+	} else {
+		array.add("")
+	}
+	return array
+}
 fun CharSequence.separateOperator(): ArrayList<String> {
 	val array = arrayListOf<String>()
 	var offset = 0
@@ -129,6 +154,10 @@ fun CharSequence.getCharCountOfString(find: Char): Int {
 
 fun Double.toSimpleString(): String {
 	return toBigDecimal().toSimpleString()
+}
+
+fun Double.isOverLimit(): Boolean {
+	return toBigDecimal() > 9007199254740991.0.toBigDecimal()
 }
 
 fun BigDecimal.toSimpleString(): String {
