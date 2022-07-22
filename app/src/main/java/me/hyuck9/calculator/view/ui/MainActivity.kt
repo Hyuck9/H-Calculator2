@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import me.hyuck9.calculator.App
@@ -13,6 +15,10 @@ import me.hyuck9.calculator.view.base.BaseActivity
 import me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel
 import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
 import splitties.resources.str
+
+//const val ADMOB_AD_UNIT_ID = "ca-app-pub-3581307060625507/6810642041"
+const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
+var currentNativeAd: NativeAd? = null
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -34,6 +40,8 @@ class MainActivity : BaseActivity() {
 		binding.apply {
 			bindViews()
 		}
+
+		MobileAds.initialize(this)
 	}
 
 	private fun ActivityMainBinding.bindViews() {
@@ -70,6 +78,56 @@ class MainActivity : BaseActivity() {
 		}
 
 	}
+
+	override fun onDestroy() {
+		currentNativeAd?.destroy()
+		super.onDestroy()
+	}
+
+
+//	private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: AdUnifiedBinding) {
+//		val nativeAdView = unifiedAdBinding.root as NativeAdView
+//
+//		nativeAdView.iconView = unifiedAdBinding.adAppIcon
+//		nativeAdView.headlineView = unifiedAdBinding.adHeadline
+//		nativeAdView.bodyView = unifiedAdBinding.adBody
+//		nativeAdView.callToActionView = unifiedAdBinding.adCallToAction
+//
+//		unifiedAdBinding.adHeadline.text = nativeAd.headline
+//		unifiedAdBinding.adBody.text = nativeAd.body
+//		unifiedAdBinding.adCallToAction.text = nativeAd.callToAction
+//		unifiedAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+//
+//		nativeAdView.setNativeAd(nativeAd)
+//	}
+//
+//	private fun refreshAd() {
+//		val builder = AdLoader.Builder(this, ADMOB_AD_UNIT_ID)
+//
+//		builder.forNativeAd { nativeAd ->
+//			if (isDestroyed || isFinishing || isChangingConfigurations) {
+//				nativeAd.destroy()
+//				return@forNativeAd
+//			}
+//
+//			currentNativeAd?.destroy()
+//			currentNativeAd = nativeAd
+//			val unifiedAdBinding = AdUnifiedBinding.inflate(layoutInflater)
+//			populateNativeAdView(nativeAd, unifiedAdBinding)
+//			binding.adFrame.apply {
+//				removeAllViews()
+//				addView(unifiedAdBinding.root)
+//			}
+//		}
+//
+//		val adLoader = builder.withAdListener(object : AdListener() {
+//			override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+//				Logger.i("Failed to load native ad with error - domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}")
+//			}
+//		}).build()
+//
+//		adLoader.loadAd(AdRequest.Builder().build())
+//	}
 
 
 	private fun showDeleteHistoryDialog() {

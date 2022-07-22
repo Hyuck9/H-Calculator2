@@ -34,13 +34,22 @@
             layout="@layout/layout_button_calc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/adFrame"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:viewModel="@{viewModel}" />
 
+        <FrameLayout
+            android:id="@+id/adFrame"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.slidingpanelayout.widget.SlidingPaneLayout
+
+        <!--<androidx.slidingpanelayout.widget.SlidingPaneLayout
             android:id="@+id/slidingPaneLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -49,7 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/layout_button_memory">
 
-        </androidx.slidingpanelayout.widget.SlidingPaneLayout>
+        </androidx.slidingpanelayout.widget.SlidingPaneLayout>-->
 
         <me.hyuck9.calculator.view.custom.DraggablePanel
             android:id="@+id/draggablePanel"
@@ -67,8 +76,8 @@
                 android:id="@+id/historyContainer"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:paddingBottom="40dp"
                 android:layout_weight="0"
-                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/layout_button_memory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
