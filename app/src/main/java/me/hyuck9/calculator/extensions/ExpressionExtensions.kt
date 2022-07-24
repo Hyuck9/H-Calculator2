@@ -157,7 +157,7 @@ fun Double.toSimpleString(): String {
 }
 
 fun Double.isOverLimit(): Boolean {
-	return toBigDecimal() > 9007199254740991.0.toBigDecimal()
+	return toBigDecimal().abs() > 9007199254740991.0.toBigDecimal()
 }
 
 fun BigDecimal.toSimpleString(): String {

@@ -243,7 +243,7 @@ class CalculatorFragment : BaseFragment() {
 
 		val adLoader = builder.withAdListener(object : AdListener() {
 			override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-				Logger.i("Failed to load native ad with error - domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}")
+				Logger.e("Failed to load native ad with error - domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}")
 			}
 		}).build()
 

@@ -42,7 +42,6 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	var isOverLimit = false
 
 
-
 	val memory = arrayOf(
 		context.readString(BUFFER_1).asLiveData(),
 		context.readString(BUFFER_2).asLiveData(),
@@ -111,13 +110,14 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 			// TODO: memory .....
 			if (isNotEmpty()) {
 				delete(length - 1, length).setExpressionBuilder()
-				// TODO: 지운 후 연산자만 남았을 경우 result 값 관련 처리
 			}
 		}
 	}
 
 	fun equalClicked(saveHistory: (history: History) -> Unit) {
-		if (outputMutableLiveData.value.isNullOrEmpty()) {
+		if (outputMutableLiveData.value.isNullOrEmpty() ||
+			"(×÷−+".contains(expressionBuilder.value!!.toString().last())
+		) {
 			showToastMessage(R.string.error_formula_is_wrong)
 			return
 		}
@@ -218,6 +218,7 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 
 
 	private fun isEdited() = currentState == CalculateState.INPUT || currentState == CalculateState.ERROR
+
 	fun setInputState() {
 		currentState = CalculateState.INPUT
 	}
@@ -302,7 +303,6 @@ class CalculatorInputViewModel(val context: Application) : AndroidViewModel(cont
 	private fun SpannableStringBuilder.setExpressionBuilder() {
 		expressionBuilder.value = this as ExpressionBuilder
 	}
-
 
 
 	fun showToastMessage(@StringRes strResId: Int) {
