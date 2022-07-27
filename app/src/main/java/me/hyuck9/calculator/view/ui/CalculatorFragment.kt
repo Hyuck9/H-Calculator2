@@ -203,7 +203,7 @@ class CalculatorFragment : BaseFragment() {
 
 	override fun onResume() {
 		super.onResume()
-		refreshAd()
+//		refreshAd()
 	}
 
 	private fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: AdUnifiedBinding) {
