@@ -69,11 +69,9 @@ class HistoryFragment : BaseFragment() {
 		}).attachToRecyclerView(rvHistory)
 
 		historyAdapter.onExpressionClick = { history ->
-			Timber.i("history : $history")
 			historyViewModel.selectHistory(history.expr)
 		}
 		historyAdapter.onAnswerClick = { history ->
-			Timber.i("history : $history")
 			historyViewModel.selectHistory(history.answer.toViewExpression())
 		}
 

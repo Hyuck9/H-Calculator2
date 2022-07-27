@@ -59,7 +59,7 @@
         <item name="android:paddingStart">16dip</item>
         <item name="android:paddingEnd">16dip</item>
         <item name="android:textColor">@color/md_grey_200</item>
-        <item name="minTextSize">36sp</item>
+        <item name="minTextSize">24sp</item>
         <item name="maxTextSize">64sp</item>
         <item name="stepTextSize">8sp</item>
     </style>
