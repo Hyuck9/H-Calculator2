@@ -68,6 +68,10 @@ class CalculatorFragment : BaseFragment() {
 
 	private fun FragmentCalculatorBinding.bindViews() {
 		inputField.input.setOnTextSizeChangeListener(formulaOnTextSizeChangeListener)
+		layoutButtonMemory.tvM1.isSelected = true
+		layoutButtonMemory.tvM2.isSelected = true
+		layoutButtonMemory.tvM3.isSelected = true
+		layoutButtonMemory.tvM4.isSelected = true
 		childFragmentManager.beginTransaction()
 			.replace(R.id.historyContainer, historyFragment)
 			.commit()

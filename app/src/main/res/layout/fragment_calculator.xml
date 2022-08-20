@@ -49,17 +49,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
 
-        <!--<androidx.slidingpanelayout.widget.SlidingPaneLayout
-            android:id="@+id/slidingPaneLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/layout_button_memory">
-
-        </androidx.slidingpanelayout.widget.SlidingPaneLayout>-->
-
         <me.hyuck9.calculator.view.custom.DraggablePanel
             android:id="@+id/draggablePanel"
             android:layout_width="0dp"

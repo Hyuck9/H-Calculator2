@@ -16,8 +16,8 @@ import me.hyuck9.calculator.view.viewmodel.CalculatorInputViewModel
 import me.hyuck9.calculator.view.viewmodel.HistoryViewModel
 import splitties.resources.str
 
-//const val ADMOB_AD_UNIT_ID = "ca-app-pub-3581307060625507/6810642041"
-const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
+const val ADMOB_AD_UNIT_ID = "ca-app-pub-3581307060625507/6810642041"
+//const val DEV_ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110"
 var currentNativeAd: NativeAd? = null
 
 @AndroidEntryPoint
@@ -38,6 +38,7 @@ class MainActivity : BaseActivity() {
 		super.onCreate(savedInstanceState)
 
 		binding.apply {
+			title = "Calculator"
 			bindViews()
 		}
 
